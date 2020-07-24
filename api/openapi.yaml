@@ -9,6 +9,8 @@ info:
   title: Starwars Movies Api
   version: 1.0.0
 servers:
+- description: Heroku Server
+  url: https://murmuring-dawn-17197.herokuapp.com/v2
 - description: Local Test
   url: http://localhost:3000/v2
 tags:
