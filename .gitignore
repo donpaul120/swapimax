@@ -4,3 +4,5 @@ node_modules
 .openapi-generator-ignore
 db_data
 .idea
+combined.log
+error.log

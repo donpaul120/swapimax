@@ -4,7 +4,7 @@ services:
     image: paulex10/starwars:latest
     container_name: starwarsservice
     ports:
-      - "3000:3000"
+      - "80:80"
     command: sh -c 'sleep 10s && knex migrate:latest'
     volumes:
       - type: bind

@@ -16,6 +16,6 @@ WORKDIR /app
 # Bundle app source
 COPY  --chown=node . .
 
-EXPOSE 3000
+EXPOSE 80
 
 CMD [ "node", "index.js" ]
