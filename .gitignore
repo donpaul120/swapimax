@@ -1,0 +1,6 @@
+node_modules
+.env
+.openapi-generator
+.openapi-generator-ignore
+db_data
+.idea

@@ -1,0 +1,464 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: donpaul120@gmail.com
+  description: Star wars movies definitions
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Starwars Movies Api
+  version: 1.0.0
+servers:
+- description: Local Test
+  url: http://localhost:3000/v2
+tags:
+- description: Everything about star war movies
+  name: Movies
+- description: Everything about movie characters
+  name: Characters
+- description: Comments about movies
+  name: Comments
+paths:
+  /movies:
+    get:
+      operationId: getMovies
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MoviesResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+      summary: Fetches all star war movies
+      tags:
+      - Movies
+      x-eov-operation-handler: controllers/MoviesController
+  /movies/{id}:
+    get:
+      operationId: getMovie
+      parameters:
+      - description: ID of the particular movie to retrieve
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int32
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+      summary: Fetches a single movie
+      tags:
+      - Movies
+      x-eov-operation-handler: controllers/MoviesController
+  /movies/{id}/characters:
+    get:
+      operationId: getMovieCharacters
+      parameters:
+      - description: Unique ID of a movie
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int32
+          type: integer
+        style: simple
+      - description: 'Sort. Specify sort parameters in this format name:asc or name:desc'
+        explode: false
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: spaceDelimited
+      - description: filter by gender
+        explode: false
+        in: query
+        name: gender
+        required: false
+        schema:
+          type: string
+        style: spaceDelimited
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieCharactersResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+      summary: Fetches all characters for a particular movie
+      tags:
+      - Movies
+      x-eov-operation-handler: controllers/MoviesController
+  /movies/{id}/comments:
+    get:
+      operationId: getMovieComments
+      parameters:
+      - description: Unique ID of a movie
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int32
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieCommentsResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+      tags:
+      - Movies
+      x-eov-operation-handler: controllers/MoviesController
+  /characters/{id}:
+    get:
+      operationId: getCharacter
+      parameters:
+      - description: ID of the particular character to retrieve
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int32
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacterResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+      summary: Fetches a single character
+      tags:
+      - Characters
+      x-eov-operation-handler: controllers/CharactersController
+  /comments:
+    post:
+      operationId: addComment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+        x-name: comment
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+      summary: Add new comment to a movie
+      tags:
+      - Comments
+      x-eov-operation-handler: controllers/CommentsController
+components:
+  responses:
+    BadRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Bad Request
+    NotFound:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: The specified resource was not found
+  schemas:
+    ApiResponse:
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+      type: object
+    Error:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+      - code
+      - message
+      type: object
+    MovieResponse:
+      allOf:
+      - $ref: '#/components/schemas/ApiResponse'
+      - $ref: '#/components/schemas/MovieResponse_allOf'
+    MoviesResponse:
+      allOf:
+      - $ref: '#/components/schemas/ApiResponse'
+      - $ref: '#/components/schemas/MoviesResponse_allOf'
+    MovieCharactersResponse:
+      allOf:
+      - $ref: '#/components/schemas/ApiResponse'
+      - $ref: '#/components/schemas/MovieCharactersResponse_allOf'
+    MovieCommentsResponse:
+      allOf:
+      - $ref: '#/components/schemas/ApiResponse'
+      - $ref: '#/components/schemas/MovieCommentsResponse_allOf'
+    CharacterResponse:
+      allOf:
+      - $ref: '#/components/schemas/ApiResponse'
+      - $ref: '#/components/schemas/CharacterResponse_allOf'
+    CommentResponse:
+      allOf:
+      - $ref: '#/components/schemas/ApiResponse'
+      - $ref: '#/components/schemas/CommentResponse_allOf'
+    Movie:
+      properties:
+        id:
+          type: integer
+          format: int32
+        episode_id:
+          format: int32
+          type: integer
+        title:
+          type: string
+        director:
+          type: string
+        producer:
+          type: string
+        opening_crawl:
+          type: string
+        release_date:
+          format: date-time
+          type: string
+        comments_count:
+          format: int32
+          type: integer
+        created:
+          format: date-time
+          type: string
+        edited:
+          format: date-time
+          type: string
+      required:
+      - episode_id
+      - name
+      type: object
+    Character:
+      properties:
+        id:
+          format: int32
+          type: integer
+        name:
+          type: string
+        birth_year:
+          type: string
+        eye_color:
+          type: string
+        gender:
+          type: string
+        hair_color:
+          type: string
+        height:
+          type: string
+        mass:
+          type: string
+        skin_color:
+          type: string
+        homeworld:
+          type: string
+        url:
+          type: string
+        created:
+          format: date-time
+          type: string
+        edited:
+          format: date-time
+          type: string
+      required:
+      - gender
+      - id
+      - name
+      type: object
+    Comment:
+      example:
+        movie_id: 6
+        edited: 2000-01-23T04:56:07.000+00:00
+        created: 2000-01-23T04:56:07.000+00:00
+        comment: comment
+        id: 0
+        ip_address: ip_address
+      properties:
+        id:
+          format: int32
+          type: integer
+        movie_id:
+          format: int32
+          type: integer
+        comment:
+          type: string
+          maxLength: 500
+        ip_address:
+          type: string
+        created:
+          format: date-time
+          type: string
+        edited:
+          format: date-time
+          type: string
+      required:
+      - comment
+      - movie_id
+      type: object
+    TotalHeight:
+      properties:
+        cm:
+          format: double
+          type: number
+        inches:
+          format: double
+          type: number
+        feet:
+          format: int32
+          type: integer
+      type: object
+    MovieResponse_allOf:
+      properties:
+        total:
+          format: int32
+          type: integer
+        data:
+          $ref: '#/components/schemas/Movie'
+      required:
+      - data
+    MoviesResponse_allOf:
+      properties:
+        total:
+          format: int32
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/Movie'
+          type: array
+      required:
+      - data
+    MovieCharactersResponse_allOf:
+      properties:
+        total:
+          format: int32
+          type: integer
+        title:
+          type: string
+        total_height:
+          $ref: '#/components/schemas/TotalHeight'
+        data:
+          items:
+            $ref: '#/components/schemas/Character'
+          type: array
+      required:
+      - data
+    MovieCommentsResponse_allOf:
+      properties:
+        total:
+          format: int32
+          type: integer
+        title:
+          type: string
+        data:
+          items:
+            $ref: '#/components/schemas/Comment'
+          type: array
+      required:
+      - data
+    CharacterResponse_allOf:
+      properties:
+        data:
+          $ref: '#/components/schemas/Character'
+      required:
+      - data
+    CommentResponse_allOf:
+      properties:
+        data:
+          $ref: '#/components/schemas/Comment'
+      required:
+      - data
