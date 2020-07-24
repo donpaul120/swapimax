@@ -29,7 +29,7 @@ describe("Add Comments", () => {
         })
     });
 
-    test('addComment: ', () => {
+    test('addComment: should add comments successfully', () => {
         const comment = {
             comment: "Any Any",
             movie_id: 1
