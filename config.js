@@ -2,7 +2,7 @@ const path = require('path');
 
 const config = {
   ROOT_DIR: __dirname,
-  URL_PORT: process.env.APP_PORT,
+  URL_PORT: process.env.PORT || process.env.APP_PORT,
   URL_PATH: 'http://localhost',
   BASE_VERSION: 'v2',
   CONTROLLER_DIRECTORY: path.join(__dirname, 'controllers'),
