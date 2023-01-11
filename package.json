@@ -24,7 +24,7 @@
     "express-openapi-validator": "^3.9.1",
     "jest": "^26.1.0",
     "js-yaml": "^3.3.0",
-    "knex": "^0.21.2",
+    "knex": "^2.4.0",
     "moment": "^2.27.0",
     "mysql2": "^2.1.0",
     "ono": "^5.0.1",
